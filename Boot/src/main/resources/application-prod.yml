@@ -1,0 +1,9 @@
+logging:
+  level:
+    root: INFO
+    com.chsbk.mesh: INFO
+spring:
+  jpa:
+    properties:
+      hibernate:
+        format_sql: false

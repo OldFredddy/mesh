@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Mesh — кабинет</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header class="navbar">
+  <span class="brand">Mesh</span>
+  <a class="nav-btn" href="/dashboard">Баланс</a>
+  <a class="nav-btn" href="/auth/logout">Выйти</a>
+</header>
+
+<section class="boiler" id="balance-block">
+  <h2>Ваш баланс</h2>
+  <table>
+    <tr><th>Текущий баланс</th><td id="cur"></td></tr>
+    <tr><th>Начальный депозит</th><td id="init"></td></tr>
+  </table>
+</section>
+
+<section class="boiler">
+  <h2>Перевод средств</h2>
+  <div class="input-group">
+    <label for="to">Номер получателя</label>
+    <input type="number" id="to" min="1" value="711111111111">
+  </div>
+  <div class="input-group">
+    <label for="sum">Сумма</label>
+    <input type="number" id="sum" step="0.01" min="1">
+  </div>
+  <div class="input-group">
+    <button onclick="transfer()">Перевести</button>
+  </div>
+  <p id="msg"></p>
+</section>
+
+<script>
+  async function loadBalance() {
+    const r = await fetch('/users/me');
+    if (r.ok) {
+      const u = await r.json();
+      document.getElementById('cur').innerText  = u.balance + ' ₽';
+      document.getElementById('init').innerText = u.initialBalance + ' ₽';
+    }
+  }
+  async function transfer() {
+    const body = {
+      to:     document.getElementById('to').value.trim(),
+      amount: Number(document.getElementById('sum').value)
+    };
+
+    const r = await fetch('/transfers', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    document.getElementById('msg').innerText =
+            r.ok ? 'Успешно!' : ('Ошибка: ' + await r.text());
+
+    if (r.ok) loadBalance();
+  }
+
+  loadBalance();
+</script>
+</body>
+</html>

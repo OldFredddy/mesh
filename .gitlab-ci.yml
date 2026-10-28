@@ -1,0 +1,26 @@
+image: gradle:8.10.2-jdk21
+
+stages:
+  - test
+  - package
+
+variables:
+  GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
+
+cache:
+  paths:
+    - .gradle/caches/
+    - .gradle/wrapper/
+
+test:
+  stage: test
+  script:
+    - gradle clean test jacocoTestReport --no-daemon
+
+package:
+  stage: package
+  script:
+    - gradle :Boot:bootJar --no-daemon
+  artifacts:
+    paths:
+      - Boot/build/libs/mesh-service.jar

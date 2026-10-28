@@ -1,0 +1,59 @@
+server:
+  port: ${SERVER_PORT:8080}
+  forward-headers-strategy: framework
+  ssl:
+    enabled: ${SERVER_SSL_ENABLED:false}
+    key-store: ${SERVER_SSL_KEYSTORE:}
+    key-store-password: ${SERVER_SSL_KEYSTORE_PASSWORD:}
+    key-store-type: PKCS12
+
+spring:
+  application:
+    name: mesh
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/mesh}?currentSchema=mesh
+    username: ${SPRING_DATASOURCE_USERNAME:mesh}
+    password: ${SPRING_DATASOURCE_PASSWORD:mesh}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: mesh
+        default_batch_fetch_size: 32
+  flyway:
+    enabled: true
+    baseline-on-migrate: false
+    default-schema: mesh
+    schemas: mesh
+    create-schemas: true
+  data:
+    redis:
+      url: ${REDIS_URL:redis://localhost:6379}
+  cache:
+    type: redis
+
+mesh:
+  security:
+    jwt:
+      secret: ${JWT_SECRET}
+      expiration-seconds: ${JWT_EXPIRATION_SECONDS:86400}
+  scheduler:
+    enabled: ${MESH_SCHEDULER_ENABLED:true}
+    interval-milliseconds: ${MESH_BALANCE_INTERVAL_MS:30000}
+  cache:
+    redis:
+      enabled: ${MESH_REDIS_CACHE_ENABLED:true}
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

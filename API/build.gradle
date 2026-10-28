@@ -1,0 +1,8 @@
+base {
+    archivesName = 'mesh-service-api'
+}
+
+dependencies {
+    api 'jakarta.validation:jakarta.validation-api'
+    api 'org.springframework.data:spring-data-commons'
+}

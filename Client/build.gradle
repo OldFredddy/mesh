@@ -1,0 +1,16 @@
+base {
+    archivesName = 'mesh-service-client'
+}
+
+dependencies {
+    api project(':API')
+    api project(':Transport-Common')
+
+    implementation 'org.springframework.boot:spring-boot-autoconfigure'
+    implementation 'org.springframework:spring-web'
+    implementation 'org.springframework:spring-context'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
